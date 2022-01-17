@@ -1,0 +1,29 @@
+{
+  "name": "example-http-datasource",
+  "version": "1.0.0",
+  "description": "An example plugin for Grafana",
+  "scripts": {
+    "build": "grafana-toolkit plugin:build",
+    "test": "grafana-toolkit plugin:test",
+    "dev": "grafana-toolkit plugin:dev",
+    "watch": "grafana-toolkit plugin:dev --watch"
+  },
+  "repository": "github:grafana/grafana-plugin-examples",
+  "author": "Grafana Labs",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/grafana/grafana-plugin-examples/issues",
+    "email": "plugins@grafana.com"
+  },
+  "devDependencies": {
+    "@grafana/data": "8.1.4",
+    "@grafana/runtime": "8.1.4",
+    "@grafana/toolkit": "8.1.4",
+    "@grafana/ui": "8.1.4",
+    "@types/lodash": "^4.14.161",
+    "emotion": "10.0.27"
+  },
+  "engines": {
+    "node": ">=14"
+  }
+}
