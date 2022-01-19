@@ -1,3 +1,3 @@
-# HTTP API data source
+# Skydive Gremlin queries datasource
 
-This example queries data from an HTTP API.
+Basic datasource to execute Gremlin queries.

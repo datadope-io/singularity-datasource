@@ -1,13 +1,13 @@
 {
   "type": "datasource",
-  "name": "HTTP",
-  "id": "example-http-datasource",
+  "name": "Singularity",
+  "id": "singularity-datasource",
   "metrics": true,
   "info": {
     "description": "",
     "author": {
-      "name": "Grafana Labs",
-      "url": "https://grafana.com"
+      "name": "Datadope",
+      "url": "https://datadope.io"
     },
     "keywords": ["example"],
     "logos": {

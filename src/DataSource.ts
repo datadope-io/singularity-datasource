@@ -6,13 +6,14 @@ import {
   FieldType,
   MutableDataFrame,
 } from '@grafana/data';
-import { getBackendSrv } from '@grafana/runtime';
+import { getTemplateSrv, getBackendSrv } from '@grafana/runtime';
 import _ from 'lodash';
 import defaults from 'lodash/defaults';
 import { defaultQuery, MyDataSourceOptions, MyQuery } from './types';
 
 export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   baseUrl: string;
+  requestDebounce: any;
 
   constructor(instanceSettings: DataSourceInstanceSettings<MyDataSourceOptions>) {
     super(instanceSettings);
@@ -23,37 +24,17 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
   async query(options: DataQueryRequest<MyQuery>): Promise<DataQueryResponse> {
     const promises = options.targets.map(async (target) => {
       const query = defaults(target, defaultQuery);
-      const response = await this.request('/api/metrics', `query=${query.queryText}`);
-
-      /**
-       * In this example, the /api/metrics endpoint returns:
-       *
-       * {
-       *   "datapoints": [
-       *     {
-       *       Time: 1234567891011,
-       *       Value: 12.5
-       *     },
-       *     {
-       *     ...
-       *   ]
-       * }
-       */
-      const datapoints = response.data.datapoints;
-
-      const timestamps: number[] = [];
-      const values: number[] = [];
-
-      for (let i = 0; i < datapoints.length; i++) {
-        timestamps.push(datapoints[i].Time);
-        values.push(datapoints[i].Value);
+      if (query.hide) {
+        return {
+          data: [],
+        };
       }
 
+      const response = await this.request(getTemplateSrv().replace(query.queryText, options.scopedVars));
       return new MutableDataFrame({
         refId: query.refId,
         fields: [
-          { name: 'Time', type: FieldType.time, values: timestamps },
-          { name: 'Value', type: FieldType.number, values: values },
+          { name: 'Data', type: FieldType.other, values: response},
         ],
       });
     });
@@ -61,7 +42,11 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     return Promise.all(promises).then((data) => ({ data }));
   }
 
-  async request(url: string, params?: string) {
+  async request(query: string) {
+    return getBackendSrv().post(`${this.baseUrl}/api/topology`, `{"GremlinQuery": "${query}"}`);
+  }
+
+  async requestGet(url: string, params?: string) {
     return getBackendSrv().datasourceRequest({
       url: `${this.baseUrl}${url}${params?.length ? `?${params}` : ''}`,
     });
@@ -74,7 +59,7 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
     const defaultErrorMessage = 'Cannot connect to API';
 
     try {
-      const response = await this.request('/healthz');
+      const response = await this.requestGet('/api');
       if (response.status === 200) {
         return {
           status: 'success',
