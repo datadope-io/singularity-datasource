@@ -1,18 +1,18 @@
 {
-  "name": "example-http-datasource",
+  "name": "singularity-datasource",
   "version": "1.0.0",
-  "description": "An example plugin for Grafana",
+  "description": "Datasource plugin to make Gremlin queries to Skydive",
   "scripts": {
     "build": "grafana-toolkit plugin:build",
     "test": "grafana-toolkit plugin:test",
     "dev": "grafana-toolkit plugin:dev",
     "watch": "grafana-toolkit plugin:dev --watch"
   },
-  "repository": "github:grafana/grafana-plugin-examples",
-  "author": "Grafana Labs",
+  "repository": "github:datadope-io/singularity-datasource",
+  "author": "Datadope",
   "license": "Apache-2.0",
   "bugs": {
-    "url": "https://github.com/grafana/grafana-plugin-examples/issues",
+    "url": "https://github.com/datadope-io/singularity-datasource/issues",
     "email": "plugins@grafana.com"
   },
   "devDependencies": {

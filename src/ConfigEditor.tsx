@@ -7,10 +7,6 @@ interface Props extends DataSourcePluginOptionsEditorProps<MyDataSourceOptions> 
 
 export const ConfigEditor: React.FC<Props> = ({ onOptionsChange, options }) => {
   return (
-    <DataSourceHttpSettings
-      defaultUrl="https://api.example.com"
-      dataSourceConfig={options}
-      onChange={onOptionsChange}
-    />
+    <DataSourceHttpSettings defaultUrl="http://localhost:8082" dataSourceConfig={options} onChange={onOptionsChange} />
   );
 };

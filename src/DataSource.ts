@@ -34,17 +34,15 @@ export class DataSource extends DataSourceApi<MyQuery, MyDataSourceOptions> {
 
       // Add "At()" step with the time range selected in Grafana, except if range is "now,now"
       if (options.rangeRaw?.to !== 'now' || options.rangeRaw?.from !== 'now') {
-        let from = options.range.from.format('X')
-        let to = options.range.to.format('X');
+        let from = parseInt(options.range.from.format('X'), 10);
+        let to = parseInt(options.range.to.format('X'), 10);
         q = query.queryText.replace(/^G\./i, 'G.At(' + to + ',' + (to - from) + ').');
       }
 
       const response = await this.request(getTemplateSrv().replace(q, options.scopedVars));
       return new MutableDataFrame({
         refId: query.refId,
-        fields: [
-          { name: 'Data', type: FieldType.other, values: response},
-        ],
+        fields: [{ name: 'Data', type: FieldType.other, values: response }],
       });
     });
 
